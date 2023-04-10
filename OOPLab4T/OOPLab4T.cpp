@@ -9,16 +9,8 @@
 // Ваші файли загловки 
 //
 #include "Lab4Exmaple.h"
+#include "Lab4.h"
 int main()
 {
-    std::cout << " Lab #4  task chain  !\n";
-    //  Код виконання завдань
-    //  Головне меню завдань
-    //  Функції та класи можуть знаходитись в інших файлах проекту
-
-    int chain = 1;
-    if (chain == 1) chain = mainExample1();
-    if (chain == 2) chain = mainExample2();
-    if (chain == 3) chain = mainExample3();
-
+    lab4();
 }
