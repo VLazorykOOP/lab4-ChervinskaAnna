@@ -7,6 +7,15 @@
 #include <conio.h>
 using namespace std;
 
+enum State {
+	NoErrors,
+	NoMemori, //не вистачає пам'яті
+	NotInRange, //виходить за межі множини
+	InvalidNumber // ініціалізація числом
+};
+
+static string SetStateStrings[] = { "NoErrors", "NoMemori", "NotInRange", "InvalidNumber" };
+
 class  VectorULong {
 	unsigned long* v;
 	unsigned long state, size;
@@ -49,7 +58,7 @@ public:
 
 
 
-	int getCount(unsigned int value) {
+	int getCount(unsigned long value) {
 		int count = 0;
 		for (int i = 0; i < size; i++) {
 			if (v[i] == value) {
@@ -123,7 +132,15 @@ public:
 		unsigned long new_size = max(this->size, a.size);
 		v_temp = (unsigned long*)calloc(new_size, sizeof(unsigned long));
 		for (int i = 0; i < new_size; i++) {
-			v_temp[i] = this->v[i] + a.v[i];
+			if (i < this->size && i < a.size) {
+				v_temp[i] = this->v[i] + a.v[i];
+			}
+			else if (i < this->size) {
+			v_temp[i] = this->v[i];
+			}
+			else {
+				v_temp[i]= a.v[i];
+			}
 		}
 		free(this->v);
 		this->v = v_temp;
@@ -132,6 +149,319 @@ public:
 	}
 
 
+
+
+	VectorULong& operator-=(VectorULong& a) {
+		unsigned long* v_temp;
+		unsigned long new_size = max(this->size, a.size);
+		v_temp = (unsigned long*)calloc(new_size, sizeof(unsigned long));
+		for (int i = 0; i < new_size; i++) {
+			if (i < this->size && i < a.size) {
+				v_temp[i] = this->v[i] - a.v[i];
+			}
+			else if (i < this->size) {
+				v_temp[i] = this->v[i];
+			}
+			else {
+				v_temp[i] = -a.v[i];
+			}
+		}
+		free(this->v);
+		this->v = v_temp;
+		this->size = new_size;
+		return *this;
+	}
+
+	VectorULong& operator*=(unsigned long value) {
+		for (int i = 0; i < size; i++) {
+			this->v[i] = this->v[i] * value;
+		}
+		return *this;
+	}
+
+	VectorULong& operator/=(unsigned long value) {
+		for (int i = 0; i < size; i++) {
+			this->v[i] = this->v[i] / value;
+		}
+		return *this;
+	}
+
+	VectorULong& operator%=(unsigned long value) {
+		for (int i = 0; i < size; i++) {
+			this->v[i] = this->v[i] % value;
+		}
+		return *this;
+	}
+
+	VectorULong& operator|=(VectorULong& a) {
+		unsigned long* v_temp;
+		unsigned long new_size = max(this->size, a.size);
+		v_temp = (unsigned long*)calloc(new_size, sizeof(unsigned long));
+		for (int i = 0; i < new_size; i++) {
+			if (i < this->size && i < a.size) {
+				v_temp[i] = this->v[i] | a.v[i];
+			}
+			else if (i < this->size) {
+				v_temp[i] = this->v[i];
+			}
+			else {
+				v_temp[i] = a.v[i];
+			}
+		}
+		free(this->v);
+		this->v = v_temp;
+		this->size = new_size;
+		return *this;
+	}
+
+	VectorULong& operator^=(VectorULong& a) {
+		unsigned long* v_temp;
+		unsigned long new_size = max(this->size, a.size);
+		v_temp = (unsigned long*)calloc(new_size, sizeof(unsigned long));
+		for (int i = 0; i < new_size; i++) {
+			if (i < this->size && i < a.size) {
+				v_temp[i] = this->v[i] ^ a.v[i];
+			}
+			else if (i < this->size) {
+				v_temp[i] = this->v[i];
+			}
+			else {
+				v_temp[i] = a.v[i];
+			}
+		}
+		free(this->v);
+		this->v = v_temp;
+		this->size = new_size;
+		return *this;
+
+	}
+
+	VectorULong& operator&=(VectorULong& a) {
+		unsigned long* v_temp;
+		unsigned long new_size = max(this->size, a.size);
+		v_temp = (unsigned long*)calloc(new_size, sizeof(unsigned long));
+		for (int i = 0; i < new_size; i++) {
+			if (i < this->size && i < a.size) {
+				v_temp[i] = this->v[i] & a.v[i];
+			}
+			else if (i < this->size) {
+				v_temp[i] = this->v[i];
+			}
+			else {
+				v_temp[i] = a.v[i];
+			}
+		}
+		free(this->v);
+		this->v = v_temp;
+		this->size = new_size;
+		return *this;
+
+	}
+
+	VectorULong& operator+(VectorULong& a) {
+		unsigned long* v_temp;
+		unsigned long new_size = max(this->size, a.size);
+		v_temp = (unsigned long*)calloc(new_size, sizeof(unsigned long));
+		for (int i = 0; i < new_size; i++) {
+			if (i < this->size && i < a.size) {
+				v_temp[i] = this->v[i] + a.v[i];
+			}
+			else if (i < this->size) {
+				v_temp[i] = this->v[i];
+			}
+			else {
+				v_temp[i] = a.v[i];
+			}
+		}
+
+
+		free(this->v);
+		this->v = v_temp;
+		this->size = new_size;
+		return *this;
+	}
+
+	VectorULong& operator-(VectorULong& a) {
+		unsigned long* v_temp;
+		unsigned long new_size = max(this->size, a.size);
+		v_temp = (unsigned long*)calloc(new_size, sizeof(unsigned long));
+		for (int i = 0; i < new_size; i++) {
+			if (i < this->size && i < a.size) {
+				v_temp[i] = this->v[i] - a.v[i];
+			}
+			else if (i < this->size) {
+				v_temp[i] = this->v[i];
+			}
+			else {
+				v_temp[i] = -a.v[i];
+			}
+		}
+		free(this->v);
+		this->v = v_temp;
+		this->size = new_size;
+		return *this;
+	}
+
+	VectorULong& operator*(unsigned long value) {
+		for (int i = 0; i < size; i++) {
+			this->v[i] = this->v[i] * value;
+		}
+		return *this;
+	}
+
+	VectorULong& operator/(unsigned long value) {
+		for (int i = 0; i < size; i++) {
+			this->v[i] = this->v[i] / value;
+		}
+		return *this;
+	}
+
+	VectorULong& operator%(unsigned long value) {
+		for (int i = 0; i < size; i++) {
+			this->v[i] = this->v[i] % value;
+		}
+		return *this;
+	}
+
+
+	VectorULong& operator|(VectorULong& a) {
+		unsigned long* v_temp;
+		unsigned long new_size = max(this->size, a.size);
+		v_temp = (unsigned long*)calloc(new_size, sizeof(unsigned long));
+		for (int i = 0; i < new_size; i++) {
+			if (i < this->size && i < a.size) {
+				v_temp[i] = this->v[i] | a.v[i];
+			}
+			else if (i < this->size) {
+				v_temp[i] = this->v[i];
+			}
+			else {
+				v_temp[i] = a.v[i];
+			}
+		}
+		free(this->v);
+		this->v = v_temp;
+		this->size = new_size;
+		return *this;
+	}
+
+	VectorULong& operator^(VectorULong& a) {
+		unsigned long* v_temp;
+		unsigned long new_size = max(this->size, a.size);
+		v_temp = (unsigned long*)calloc(new_size, sizeof(unsigned long));
+		for (int i = 0; i < new_size; i++) {
+			if (i < this->size && i < a.size) {
+				v_temp[i] = this->v[i] ^ a.v[i];
+			}
+			else if (i < this->size) {
+				v_temp[i] = this->v[i];
+			}
+			else {
+				v_temp[i] = a.v[i];
+			}
+		}
+		free(this->v);
+		this->v = v_temp;
+		this->size = new_size;
+		return *this;
+
+	}
+
+	VectorULong& operator&(VectorULong& a) {
+		unsigned long* v_temp;
+		unsigned long new_size = max(this->size, a.size);
+		v_temp = (unsigned long*)calloc(new_size, sizeof(unsigned long));
+		for (int i = 0; i < new_size; i++) {
+			if (i < this->size && i < a.size) {
+				v_temp[i] = this->v[i] & a.v[i];
+			}
+			else if (i < this->size) {
+				v_temp[i] = this->v[i];
+			}
+			else {
+				v_temp[i] = a.v[i];
+			}
+		}
+		free(this->v);
+		this->v = v_temp;
+		this->size = new_size;
+		return *this;
+
+	}
+
+	VectorULong& operator>>(unsigned long value) {
+		for (int i = 0; i < size; i++) {
+			this->v[i] = this->v[i] >> value ;
+		}
+		return *this;
+	}
+
+	VectorULong& operator<<(unsigned long value) {
+		for (int i = 0; i < size; i++) {
+			this->v[i] = this->v[i] << value;
+		}
+		return *this;
+	}
+
+	bool operator==(VectorULong& a) {
+
+		if (this->size != a.size) {
+			return false;
+		}
+
+		for (int i = 0; i < size; i++){
+			if (this->v[i] != a.v[i]) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	bool operator!=(VectorULong& a) {
+		if (this->size != a.size) {
+			return true;
+		}
+		for (int i = 0; i < size; i++){
+			if (this->v[i] != a.v[i]) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	unsigned long& operator[](const int index) {
+		if (size < index) {
+			state = NotInRange;
+			return v[size-1];
+		}
+		else {
+			return v[index];
+		}
+	}
+	
+	unsigned long GetObjectWeight() {
+		unsigned long j = 0;
+		for (int i = 0; i < size; i++) {
+			j = j + (v[i] * v[i]);
+		}
+		return j;
+	}
+
+	bool operator>(VectorULong& a) {
+		return a.GetObjectWeight() > this->GetObjectWeight();
+	}
+
+	bool operator>=(VectorULong& a) {
+		return a.GetObjectWeight() >= this->GetObjectWeight();
+	}
+
+	bool operator<(VectorULong& a) {
+		return a.GetObjectWeight() < this->GetObjectWeight();
+	}
+
+	bool operator<=(VectorULong & a) {
+		return a.GetObjectWeight() <= this->GetObjectWeight();
+	}
 };
 
 int lab4() {
