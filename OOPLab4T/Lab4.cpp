@@ -17,28 +17,30 @@ enum State {
 static string SetStateStrings[] = { "NoErrors", "NoMemori", "NotInRange", "InvalidNumber" };
 
 class  VectorULong {
-	unsigned long* v;
 	unsigned long state, size;
 
 public:
+	 long* v;
 	VectorULong() {
-		v = (unsigned long*)calloc(1, sizeof(unsigned long));
+		v = (long*)calloc(1, sizeof(long));
 		v[0] = 0;
-
+		size = 1;
 	}
 
 	VectorULong(unsigned long SizeVec) {
-		v = (unsigned long*)calloc(SizeVec, sizeof(unsigned long));
+		v = (long*)calloc(SizeVec, sizeof(long));
 		for (int i = 0; i < SizeVec; i++) {
 			v[i] = 0;
 		}
+		size = SizeVec;
 	}
 
-	VectorULong(unsigned long SizeVec, unsigned long value) {
-		v = (unsigned long*)calloc(SizeVec, sizeof(unsigned long));
+	VectorULong(unsigned long SizeVec, long value) {
+		v = (long*)calloc(SizeVec, sizeof(long));
 		for (int i = 0; i < SizeVec; i++) {
 			v[i] = value;
 		}
+		size = SizeVec;
 	}
 
 	VectorULong(const VectorULong& ref_Point)
@@ -46,7 +48,7 @@ public:
 		this->state = ref_Point.state;
 		this->size = ref_Point.size;
 
-		this->v = (unsigned long*)calloc(size, sizeof(unsigned long));
+		this->v = (long*)calloc(size, sizeof(long));
 		for (int i = 0; i < size; i++) {
 			this->v[i] = ref_Point.v[i];
 		}
@@ -55,34 +57,6 @@ public:
 	~VectorULong() {
 		free(v);
 	}
-
-
-
-	int getCount(unsigned long value) {
-		int count = 0;
-		for (int i = 0; i < size; i++) {
-			if (v[i] == value) {
-				count++;
-			}
-		}
-		return count;
-	}
-
-
-	void printInfo()
-	{
-
-		cout << "State =" << state << " " << "Size =" << size << " ";
-		for (int i = 0; i < size; i++) {
-			cout << "[" << v[i] << "] ";
-		}
-
-		cout << endl;
-		//cout << "Intersection operation " << endl;
-		//cout << "Difference operation " << endl;
-	}
-
-
 
 	VectorULong& operator++(const int param) {
 		for (int i = 0; i < size; i++) {
@@ -110,7 +84,7 @@ public:
 		return *this;
 	}
 
-	VectorULong& operator-(const int param) {
+	VectorULong& operator-() {
 		for (int i = 0; i < size; i++) {
 			this->v[i] = this->v[i] * (-1);
 		}
@@ -120,7 +94,7 @@ public:
 	VectorULong& operator=(VectorULong& a) {
 		this->size = a.size;
 		free(v);
-		v = (unsigned long*)calloc(a.size, sizeof(unsigned long));
+		v = (long*)calloc(a.size, sizeof(long));
 		for (int i = 0; i < a.size; i++) {
 			this->v[i] = a.v[i];
 		}
@@ -128,9 +102,9 @@ public:
 	}
 
 	VectorULong& operator+=(VectorULong& a) {
-		unsigned long* v_temp;
+		long* v_temp;
 		unsigned long new_size = max(this->size, a.size);
-		v_temp = (unsigned long*)calloc(new_size, sizeof(unsigned long));
+		v_temp = (long*)calloc(new_size, sizeof(long));
 		for (int i = 0; i < new_size; i++) {
 			if (i < this->size && i < a.size) {
 				v_temp[i] = this->v[i] + a.v[i];
@@ -152,9 +126,9 @@ public:
 
 
 	VectorULong& operator-=(VectorULong& a) {
-		unsigned long* v_temp;
+		long* v_temp;
 		unsigned long new_size = max(this->size, a.size);
-		v_temp = (unsigned long*)calloc(new_size, sizeof(unsigned long));
+		v_temp = (long*)calloc(new_size, sizeof(long));
 		for (int i = 0; i < new_size; i++) {
 			if (i < this->size && i < a.size) {
 				v_temp[i] = this->v[i] - a.v[i];
@@ -163,7 +137,7 @@ public:
 				v_temp[i] = this->v[i];
 			}
 			else {
-				v_temp[i] = -a.v[i];
+				v_temp[i] = 0;
 			}
 		}
 		free(this->v);
@@ -172,21 +146,21 @@ public:
 		return *this;
 	}
 
-	VectorULong& operator*=(unsigned long value) {
+	VectorULong& operator*=(long value) {
 		for (int i = 0; i < size; i++) {
 			this->v[i] = this->v[i] * value;
 		}
 		return *this;
 	}
 
-	VectorULong& operator/=(unsigned long value) {
+	VectorULong& operator/=(long value) {
 		for (int i = 0; i < size; i++) {
 			this->v[i] = this->v[i] / value;
 		}
 		return *this;
 	}
 
-	VectorULong& operator%=(unsigned long value) {
+	VectorULong& operator%=(long value) {
 		for (int i = 0; i < size; i++) {
 			this->v[i] = this->v[i] % value;
 		}
@@ -194,9 +168,9 @@ public:
 	}
 
 	VectorULong& operator|=(VectorULong& a) {
-		unsigned long* v_temp;
+		long* v_temp;
 		unsigned long new_size = max(this->size, a.size);
-		v_temp = (unsigned long*)calloc(new_size, sizeof(unsigned long));
+		v_temp = (long*)calloc(new_size, sizeof(long));
 		for (int i = 0; i < new_size; i++) {
 			if (i < this->size && i < a.size) {
 				v_temp[i] = this->v[i] | a.v[i];
@@ -215,9 +189,9 @@ public:
 	}
 
 	VectorULong& operator^=(VectorULong& a) {
-		unsigned long* v_temp;
+		long* v_temp;
 		unsigned long new_size = max(this->size, a.size);
-		v_temp = (unsigned long*)calloc(new_size, sizeof(unsigned long));
+		v_temp = (long*)calloc(new_size, sizeof(long));
 		for (int i = 0; i < new_size; i++) {
 			if (i < this->size && i < a.size) {
 				v_temp[i] = this->v[i] ^ a.v[i];
@@ -237,9 +211,9 @@ public:
 	}
 
 	VectorULong& operator&=(VectorULong& a) {
-		unsigned long* v_temp;
+		long* v_temp;
 		unsigned long new_size = max(this->size, a.size);
-		v_temp = (unsigned long*)calloc(new_size, sizeof(unsigned long));
+		v_temp = (long*)calloc(new_size, sizeof(long));
 		for (int i = 0; i < new_size; i++) {
 			if (i < this->size && i < a.size) {
 				v_temp[i] = this->v[i] & a.v[i];
@@ -259,9 +233,9 @@ public:
 	}
 
 	VectorULong& operator+(VectorULong& a) {
-		unsigned long* v_temp;
+		long* v_temp;
 		unsigned long new_size = max(this->size, a.size);
-		v_temp = (unsigned long*)calloc(new_size, sizeof(unsigned long));
+		v_temp = (long*)calloc(new_size, sizeof(long));
 		for (int i = 0; i < new_size; i++) {
 			if (i < this->size && i < a.size) {
 				v_temp[i] = this->v[i] + a.v[i];
@@ -282,9 +256,9 @@ public:
 	}
 
 	VectorULong& operator-(VectorULong& a) {
-		unsigned long* v_temp;
+		long* v_temp;
 		unsigned long new_size = max(this->size, a.size);
-		v_temp = (unsigned long*)calloc(new_size, sizeof(unsigned long));
+		v_temp = (long*)calloc(new_size, sizeof(long));
 		for (int i = 0; i < new_size; i++) {
 			if (i < this->size && i < a.size) {
 				v_temp[i] = this->v[i] - a.v[i];
@@ -293,7 +267,7 @@ public:
 				v_temp[i] = this->v[i];
 			}
 			else {
-				v_temp[i] = -a.v[i];
+				v_temp[i] = 0;
 			}
 		}
 		free(this->v);
@@ -302,21 +276,21 @@ public:
 		return *this;
 	}
 
-	VectorULong& operator*(unsigned long value) {
+	VectorULong& operator*(long value) {
 		for (int i = 0; i < size; i++) {
 			this->v[i] = this->v[i] * value;
 		}
 		return *this;
 	}
 
-	VectorULong& operator/(unsigned long value) {
+	VectorULong& operator/(long value) {
 		for (int i = 0; i < size; i++) {
 			this->v[i] = this->v[i] / value;
 		}
 		return *this;
 	}
 
-	VectorULong& operator%(unsigned long value) {
+	VectorULong& operator%(long value) {
 		for (int i = 0; i < size; i++) {
 			this->v[i] = this->v[i] % value;
 		}
@@ -325,9 +299,9 @@ public:
 
 
 	VectorULong& operator|(VectorULong& a) {
-		unsigned long* v_temp;
+		long* v_temp;
 		unsigned long new_size = max(this->size, a.size);
-		v_temp = (unsigned long*)calloc(new_size, sizeof(unsigned long));
+		v_temp = (long*)calloc(new_size, sizeof(long));
 		for (int i = 0; i < new_size; i++) {
 			if (i < this->size && i < a.size) {
 				v_temp[i] = this->v[i] | a.v[i];
@@ -346,9 +320,9 @@ public:
 	}
 
 	VectorULong& operator^(VectorULong& a) {
-		unsigned long* v_temp;
+		long* v_temp;
 		unsigned long new_size = max(this->size, a.size);
-		v_temp = (unsigned long*)calloc(new_size, sizeof(unsigned long));
+		v_temp = (long*)calloc(new_size, sizeof(long));
 		for (int i = 0; i < new_size; i++) {
 			if (i < this->size && i < a.size) {
 				v_temp[i] = this->v[i] ^ a.v[i];
@@ -368,9 +342,9 @@ public:
 	}
 
 	VectorULong& operator&(VectorULong& a) {
-		unsigned long* v_temp;
+		long* v_temp;
 		unsigned long new_size = max(this->size, a.size);
-		v_temp = (unsigned long*)calloc(new_size, sizeof(unsigned long));
+		v_temp = (long*)calloc(new_size, sizeof(long));
 		for (int i = 0; i < new_size; i++) {
 			if (i < this->size && i < a.size) {
 				v_temp[i] = this->v[i] & a.v[i];
@@ -389,14 +363,14 @@ public:
 
 	}
 
-	VectorULong& operator>>(unsigned long value) {
+	VectorULong& operator>>(long value) {
 		for (int i = 0; i < size; i++) {
 			this->v[i] = this->v[i] >> value ;
 		}
 		return *this;
 	}
 
-	VectorULong& operator<<(unsigned long value) {
+	VectorULong& operator<<(long value) {
 		for (int i = 0; i < size; i++) {
 			this->v[i] = this->v[i] << value;
 		}
@@ -429,7 +403,7 @@ public:
 		return false;
 	}
 
-	unsigned long& operator[](const int index) {
+	long& operator[](const int index) {
 		if (size < index) {
 			state = NotInRange;
 			return v[size-1];
@@ -439,7 +413,7 @@ public:
 		}
 	}
 	
-	unsigned long GetObjectWeight() {
+	long GetObjectWeight() {
 		unsigned long j = 0;
 		for (int i = 0; i < size; i++) {
 			j = j + (v[i] * v[i]);
@@ -462,9 +436,351 @@ public:
 	bool operator<=(VectorULong & a) {
 		return a.GetObjectWeight() <= this->GetObjectWeight();
 	}
+
+	void printInfo()
+	{
+
+		cout << "Size =" << size << " ";
+		cout << "State=" << SetStateStrings[state] << " ";
+		for (int i = 0; i < size; i++) {
+			cout << "[" << v[i] << "] ";
+		}
+
+		cout << endl;
+	}
 };
 
+void Unari() {
+	VectorULong obj1(5, 4);
+	obj1.v[1]=6;
+	obj1.printInfo();
+	cout << "Test ++" << endl;
+	obj1++; 
+	obj1.printInfo();
+	cout << "Test --" << endl;
+	obj1--;
+	obj1.printInfo();
+	cout << "Test !" << endl;
+	cout << "Result " << !obj1 << endl;
+	cout << "Test ! if size = 0" << endl;
+	VectorULong obj2(0);
+	cout <<"Result "<< !obj2 << endl;
+
+	VectorULong obj3(5, 4);
+	obj3.v[1] = 6;
+	obj3.printInfo();
+	cout << "Test ~" << endl;
+    ~obj3;
+	obj3.printInfo();
+	cout << "Test -" << endl;
+	VectorULong obj6(5, 4);
+	obj6.v[1] = 6;
+	VectorULong obj5;
+	obj6.printInfo();
+	obj5= -obj6;
+	obj6.printInfo();
+
+}
+
+void Prisvoena(){
+
+cout << "Test =" << endl;
+	VectorULong obj7(5, 4);
+	obj7.v[1] = 6;
+	VectorULong obj8(6, 3);
+	obj8.v[1] = 5;
+	cout << "Before" << endl;
+	obj7.printInfo();
+	obj8.printInfo();
+	cout << "After" << endl;
+	obj8 = obj7;
+	obj7.printInfo();
+	obj8.printInfo();
+
+	cout << "Test +=" << endl;
+	VectorULong obj3(6, 7);
+	obj3.v[1] = 5;
+	VectorULong obj4(6, 3);
+	obj4.v[1] = 5;
+	cout << "Before" << endl;
+	obj3.printInfo();
+	cout << "After" << endl;
+	obj3 += obj4;
+	obj3.printInfo();
+
+	cout << "Test -=" << endl;
+	VectorULong obj5(6, 2);
+	obj5.v[1] = 8;
+	VectorULong obj6(6, 4);
+	obj6.v[1] = 1;
+	cout << "Before" << endl;
+	obj5.printInfo();
+	cout << "After" << endl;
+	obj5 -= obj6;
+	obj5.printInfo();
+
+	cout << "Test *=" << endl;
+	VectorULong obj1(4, 7);
+	obj1.v[1] = 4;
+	cout << "Before" << endl;
+	obj1.printInfo();
+	cout << "After" << endl;
+	obj1 *= 8;
+	obj1.printInfo();
+
+	cout << "Test /=" << endl;
+	VectorULong obj2(7, 2);
+	obj2.v[1] = 4;
+	cout << "Before" << endl;
+	obj2.printInfo();
+	cout << "After" << endl;
+	obj2 /= 2;
+	obj2.printInfo();
+
+	cout << "Test %=" << endl;
+	VectorULong obj9(4, 7);
+	obj9.v[1] = 4;
+	cout << "Before" << endl;
+	obj9.printInfo();
+	cout << "After" << endl;
+	obj9 %= 4;
+	obj9.printInfo();
+
+	cout << "Test |=" << endl;
+	VectorULong obj10(3, 5);
+	obj10.v[1] = 9;
+	VectorULong obj11(7, 2);
+	obj11.v[1] = 9;
+	cout << "Before" << endl;
+	obj10.printInfo();
+	cout << "After" << endl;
+	obj10 |= obj11;
+	obj10.printInfo();
+
+	cout << "Test ^=" << endl;
+	VectorULong obj12(6, 2);
+	obj12.v[1] = 8;
+	VectorULong obj13(6, 4);
+	obj13.v[1] = 1;
+	cout << "Before" << endl;
+	obj12.printInfo();
+	cout << "After" << endl;
+	obj12 ^= obj13;
+	obj12.printInfo();
+
+	cout << "Test &=" << endl;
+	VectorULong obj14(6, 2);
+	obj14.v[1] = 8;
+	cout << "Before" << endl;
+	obj14.printInfo();
+	cout << "After" << endl;
+	obj14 &= obj14;
+	obj14.printInfo();
+}
+
+void Arithmetic() {
+	cout << "Test +" << endl;
+	VectorULong obj5(6, 7);
+	obj5.v[1] = 5;
+	VectorULong obj4(6, 3);
+	obj4.v[1] = 5;
+	cout << "Before" << endl;
+	obj4.printInfo();
+	obj5.printInfo();
+	VectorULong obj3;
+	cout << "After" << endl;
+	obj3= obj4+ obj5;
+	obj3.printInfo();
+
+	cout << "Test -" << endl;
+	VectorULong obj1(5, 7);
+	obj1.v[1] = 4;
+	VectorULong obj2(4, 3);
+	obj2.v[1] = 5;
+	cout << "Before" << endl;
+	obj1.printInfo();
+	obj2.printInfo();
+	VectorULong obj6;
+	cout << "After" << endl;
+	obj6 = obj1 - obj2;
+	obj6.printInfo();
+
+	cout << "Test *" << endl;
+	VectorULong obj7(4, 7);
+	obj7.v[1] = 4;
+	cout << "Before" << endl;
+	obj7.printInfo();
+	cout << "After" << endl;
+	VectorULong obj8;
+	obj8 = obj7 * 5;
+	obj8.printInfo();
+
+	cout << "Test /" << endl;
+	VectorULong obj10(3, 9);
+	obj10.v[1] = 3;
+	cout << "Before" << endl;
+	obj10.printInfo();
+	cout << "After" << endl;
+	VectorULong obj11;
+	obj11 = obj10 / 3;
+	obj11.printInfo();
+
+	cout << "Test %" << endl;
+	VectorULong obj9(6, 8);
+	obj9.v[1] = 4;
+	cout << "Before" << endl;
+	obj9.printInfo();
+	cout << "After" << endl;
+	VectorULong obj12;
+	obj12 = obj9 % 3;
+	obj12.printInfo();
+}
+
+void Pobitovi() {
+	cout << "Test |" << endl;
+	VectorULong obj1(5, 7);
+	obj1.v[1] = 4;
+	VectorULong obj2(3, 4);
+	obj2.v[1] = 8;
+	cout << "Before" << endl;
+	obj1.printInfo();
+	obj2.printInfo();
+	VectorULong obj3;
+	cout << "After" << endl;
+	obj3 = obj1 | obj2;
+	obj3.printInfo();
+
+	cout << "Test ^" << endl;
+	VectorULong obj4(5, 4);
+	obj4.v[1] = 3;
+	VectorULong obj5(4, 3);
+	obj5.v[1] = 5;
+	cout << "Before" << endl;
+	obj4.printInfo();
+	obj5.printInfo();
+	VectorULong obj6;
+	cout << "After" << endl;
+	obj6 = obj4 ^ obj5;
+	obj6.printInfo();
+
+	cout << "Test &" << endl;
+	VectorULong obj7(7, 8);
+	obj7.v[1] = 6;
+	VectorULong obj8(6, 9);
+	obj8.v[1] = 3;
+	cout << "Before" << endl;
+	obj7.printInfo();
+	obj8.printInfo();
+	VectorULong obj9;
+	cout << "After" << endl;
+	obj9 = obj7 & obj8;
+	obj9.printInfo();
+}
+
+void Operation() {
+	cout << "Test >>" << endl;
+	VectorULong obj7(4, 7);
+	obj7.v[1] = 4;
+	cout << "Before" << endl;
+	obj7.printInfo();
+	cout << "After" << endl;
+	VectorULong obj8;
+	obj8 = obj7 >> 5;
+	obj8.printInfo();
+
+	cout << "Test <<" << endl;
+	VectorULong obj9(6, 8);
+	obj9.v[1] = 4;
+	cout << "Before" << endl;
+	obj9.printInfo();
+	cout << "After" << endl;
+	VectorULong obj12;
+	obj12 = obj9 << 3;
+	obj12.printInfo();
+
+	cout << "Test ==" << endl;
+	VectorULong obj1(5, 4);
+	obj1.v[1] = 6;
+	VectorULong obj2(6, 3);
+	obj2.v[1] = 5;
+	cout << "Result " << (obj1 == obj2) << endl;
+
+	cout << "Test !=" << endl;
+	VectorULong obj3(3, 4);
+	obj3.v[1] = 8;
+	VectorULong obj4(6, 3);
+	obj4.v[1] = 7;
+	cout << "Result " << (obj3 != obj4) << endl;
+
+	cout << "Test []" << endl;
+	VectorULong obj13(6, 3);
+	obj13[1] = 5;
+	obj13.printInfo();
+
+
+}
+
+void Comparition() {
+	cout << "Test >" << endl;
+	VectorULong obj3(3, 4);
+	obj3.v[1] = 8;
+	VectorULong obj4(6, 3);
+	obj4.v[1] = 7;
+	cout << "Result " << (obj3 > obj4) << endl;
+
+	cout << "Test >=" << endl;
+	VectorULong obj1(5, 4);
+	obj1.v[1] = 6;
+	VectorULong obj2(6, 3);
+	obj2.v[1] = 5;
+	cout << "Result " << (obj1 >= obj2) << endl;
+
+	cout << "Test <" << endl;
+	VectorULong obj5(4, 6);
+	obj5.v[1] = 2;
+	VectorULong obj6(5, 8);
+	obj6.v[1] = 1;
+	cout << "Result " << (obj5 < obj6) << endl;
+
+	cout << "Test <=" << endl;
+	VectorULong obj7(3, 4);
+	obj7.v[1] = 8;
+	VectorULong obj8(3, 4);
+	obj8.v[1] = 8;
+	cout << "Result " << (obj7 <= obj8) << endl;
+
+}
+
+void Errors() {
+	cout << "Test []" << endl;
+	VectorULong obj13(6, 3);
+	obj13[100] = 5;
+	obj13.printInfo();
+}
+
 int lab4() {
-	cout << "Hello world!";
+	char ch;
+	do {
+		cout << "\nSelect operation: \n";
+		cout << "    1.  Unarni operation \n";
+		cout << "    2.  Operation Prisvoena \n";
+		cout << "    3.  Arithmetic binary\n";
+		cout << "    4.  Pobitovi operation\n";
+		cout << "    5.  Operation ==,!=,[]\n";
+		cout << "    6.  Operation comparition (>, >=, <,<= ) \n";
+		cout << "    7.  Test Errors \n";
+		cout << "    8.  Exit \n";
+
+		ch = _getch();
+		switch (ch) {
+		case '1':  Unari(); break;
+	    case '2': Prisvoena(); break;
+		case '3': Arithmetic(); break;
+	    case '4': Pobitovi(); break;
+		case '5': Operation(); break;
+		case '6': Comparition(); break;
+		case '7': Errors(); break;
+		}
+	} while (ch != '8');
 	return 0;
 }
