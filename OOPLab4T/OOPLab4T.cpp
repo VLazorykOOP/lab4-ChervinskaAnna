@@ -5,6 +5,11 @@
 
 
 #include <iostream>
+#include "Lab4.h"
+#include "Task2.h"
+#include <conio.h>
+using namespace std;
+
 
 // Ваші файли загловки 
 //
@@ -12,5 +17,18 @@
 #include "Lab4.h"
 int main()
 {
-    lab4();
+	char ch;
+	do {
+		cout << "\nSelect Task: \n";
+		cout << "    1.  Task1 \n";
+		cout << "    2.  Task2 \n";
+		cout << "    3.  Exit \n";
+
+		ch = _getch();
+		switch (ch) {
+		case '1':  Task1(); break;
+		case '2': Task2(); break;
+		}
+	} while (ch != '3');
+	return 0;
 }

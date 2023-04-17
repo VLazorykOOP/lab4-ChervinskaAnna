@@ -6,6 +6,7 @@
 #include <malloc.h>
 #include <conio.h>
 using namespace std;
+typedef unsigned int uint;
 
 enum State {
 	NoErrors,
@@ -758,7 +759,7 @@ void Errors() {
 	obj13.printInfo();
 }
 
-int lab4() {
+void Task1() {
 	char ch;
 	do {
 		cout << "\nSelect operation: \n";
@@ -774,13 +775,30 @@ int lab4() {
 		ch = _getch();
 		switch (ch) {
 		case '1':  Unari(); break;
-	    case '2': Prisvoena(); break;
+		case '2': Prisvoena(); break;
 		case '3': Arithmetic(); break;
-	    case '4': Pobitovi(); break;
+		case '4': Pobitovi(); break;
 		case '5': Operation(); break;
 		case '6': Comparition(); break;
 		case '7': Errors(); break;
 		}
 	} while (ch != '8');
-	return 0;
 }
+
+//
+//int lab4() {
+//	char ch;
+//	do {
+//		cout << "\nSelect Task: \n";
+//		cout << "    1.  Task1 \n";
+//		cout << "    2.  Task2 \n";
+//		cout << "    3.  Exit \n";
+//
+//		ch = _getch();
+//		switch (ch) {
+//		case '1':  Task1(); break;
+//	    case '2': Task2(); break;
+//		}
+//	} while (ch != '3');
+//	return 0;
+//}

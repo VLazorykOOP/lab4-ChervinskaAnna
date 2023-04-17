@@ -1,2 +1,2 @@
 #pragma once
-int lab4();
+void Task1();
