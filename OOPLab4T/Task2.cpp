@@ -113,13 +113,4 @@ void Task2()
 	Produkt Presult;
 	Presult = dbase[Num];
 	cout <<"Number " << Num << " Product " << Presult << endl;
-
-	
-	/*Produkt r = { 10,30 }, ro;
-	uint fli = 32;
-	ro = dbase[fli];
-	cout << " Test : uint operator[](MyTime&s) " << " time " << r << " light " << dbase[r] << endl;
-	cout << " Flight with time : 9 to 11 \n";
-	dbase(9, 11);
-	cout << " End test \n";*/
 }
